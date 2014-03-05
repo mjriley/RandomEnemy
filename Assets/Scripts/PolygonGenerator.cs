@@ -18,20 +18,21 @@ public class PolygonGenerator : MonoBehaviour {
 	// after we make them up we'll save them as this mesh
 	private Mesh mesh;
 
+    private Grid grid;
+
 	private float tUnit = 0.25f;
 	private Vector2 tStone = new Vector2(1, 0);
 	private Vector2 tGrass = new Vector2(0, 1);
+    private Vector2 tBrick = new Vector2(1, 1);
 
 	private int squareCount;
-
-	public byte[,] blocks;
-
 
 	// Use this for initialization
 	void Start () {
 		mesh = GetComponent<MeshFilter> ().mesh;
+        grid = GetComponent<Grid>();
 
-		GenTerrain ();
+		//GenTerrain ();
 		BuildMesh ();
 		UpdateMesh ();
 	}
@@ -84,28 +85,34 @@ public class PolygonGenerator : MonoBehaviour {
 		++squareCount;
 	}
 
-	void GenTerrain()
-	{
-		blocks = new byte[10, 10];
-
-		for (int px = 0; px < blocks.GetLength(0); ++px)
-		{
-			for (int py = 0; py < blocks.GetLength(1); ++py)
-			{
-				if (py == 5)
-				{
-					blocks[px, py] = 2;
-				}
-				else if (py < 5)
-				{
-					blocks[px, py] = 1;
-				}
-			}
-		}
-	}
+//	void GenTerrain()
+//	{
+//		blocks = new byte[grid.x, grid.y];
+//
+//		for (int px = 0; px < blocks.GetLength(0); ++px)
+//		{
+//			for (int py = 0; py < blocks.GetLength(1); ++py)
+//			{
+//				if (py == 5)
+//				{
+//					blocks[px, py] = 2;
+//				}
+//				else if (py < 5)
+//				{
+//					blocks[px, py] = 1;
+//				}
+//                else
+//                {
+//                    blocks[px, py] = 3;
+//                }
+//			}
+//		}
+//	}
 
 	void BuildMesh()
 	{
+        byte[,] blocks = grid.getTerrainData();
+
 		for (int px = 0; px < blocks.GetLength (0); ++px)
 		{
 			for (int py = 0; py < blocks.GetLength(1); ++py)
@@ -118,6 +125,10 @@ public class PolygonGenerator : MonoBehaviour {
 				{
 					GenSquare (px, py, tGrass);
 				}
+                else if (blocks[px, py] == 3)
+                {
+                    GenSquare(px, py, tBrick);
+                }
 			}
 		}
 	}

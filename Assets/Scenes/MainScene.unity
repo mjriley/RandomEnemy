@@ -83,9 +83,11 @@ GameObject:
   m_Component:
   - 4: {fileID: 360566418}
   - 33: {fileID: 360566417}
+  - 114: {fileID: 360566422}
   - 114: {fileID: 360566416}
   - 23: {fileID: 360566419}
   - 64: {fileID: 360566420}
+  - 114: {fileID: 360566421}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -159,6 +161,34 @@ MeshCollider:
   m_SmoothSphereCollisions: 0
   m_Convex: 0
   m_Mesh: {fileID: 0}
+--- !u!114 &360566421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 360566415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c64b7c9ccfa468849b736f8f5c2628ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveX: 1
+  moveY: 1
+  moveFrames: 60
+  player: {fileID: 1072973566}
+--- !u!114 &360566422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 360566415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7d5bf44d78906946bf964ebc9a60b80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  x: 7
+  y: 7
 --- !u!1 &1072973566
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,6 +197,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1072973567}
+  - 114: {fileID: 1072973568}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -186,6 +217,21 @@ Transform:
   m_Children:
   - {fileID: 1701689849}
   m_Father: {fileID: 0}
+--- !u!114 &1072973568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1072973566}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c64b7c9ccfa468849b736f8f5c2628ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveX: 1
+  moveY: 1
+  moveFrames: 30
+  player: {fileID: 0}
 --- !u!1 &1189248650
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,7 +292,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 3
+  orthographic size: 4
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -262,7 +308,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1189248650}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.25, y: 3, z: -10}
+  m_LocalPosition: {x: 7.0999999, y: 4, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -316,3 +362,66 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_Sprite: {fileID: 21300000, guid: 55497f137b112d245b8e47542753778c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!1 &2107289083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2107289085}
+  - 132: {fileID: 2107289084}
+  - 114: {fileID: 2107289086}
+  m_Layer: 0
+  m_Name: statusDisplay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!132 &2107289084
+GUIText:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2107289083}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Text: Test Me
+  m_Anchor: 1
+  m_Alignment: 1
+  m_PixelOffset: {x: 0, y: 0}
+  m_LineSpacing: 1
+  m_TabSize: 4
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Material: {fileID: 0}
+  m_FontSize: 20
+  m_FontStyle: 0
+  m_Color:
+    serializedVersion: 2
+    rgba: 4278190329
+  m_PixelCorrect: 1
+  m_RichText: 1
+--- !u!4 &2107289085
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2107289083}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .5, y: .980000019, z: 10.1000004}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &2107289086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2107289083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b4556e569206424f9d572ba35d85992, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hostility: 0
