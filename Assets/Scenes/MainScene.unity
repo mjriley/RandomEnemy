@@ -174,7 +174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveX: 1
   moveY: 1
-  moveFrames: 60
+  moveFrames: 20
   player: {fileID: 1072973566}
 --- !u!114 &360566422
 MonoBehaviour:
