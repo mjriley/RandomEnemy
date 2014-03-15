@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour {
 
 	public float moveX = 1.00f;
-		public float moveY = 1.00f;
+	public float moveY = 1.00f;
 
 	public int moveFrames = 10;
 
@@ -13,15 +13,28 @@ public class PlayerMovement : MonoBehaviour {
 
     private HostilityDisplay hostility;
 
-    private Grid grid;
+    public GameObject terrain;
+	private Grid grid;
 
-    public GameObject player;
+	public int currentHostility = 0;
+
 
 	// Use this for initialization
 	void Start ()
 	{
-        grid = GetComponent<Grid>();
+		grid = terrain.GetComponent<Grid>();
         hostility = GameObject.Find("statusDisplay").GetComponent<HostilityDisplay>();
+
+		UpdateHostility ();
+	}
+
+	void UpdateHostility()
+	{
+		hostility.hostility = grid.getHostilityData () [(int)transform.position.x, (int)transform.position.y];
+	}
+
+	void CheckForRandomBattle()
+	{
 	}
 	
 	// Update is called once per frame
@@ -40,35 +53,35 @@ public class PlayerMovement : MonoBehaviour {
 
                 if (h > 0)
                 {
-                    if (player.transform.position.x < grid.x - 1)
+                    if (transform.position.x < grid.x - 1)
                     {
-                        player.transform.Translate(new Vector3(moveX, 0.0f, 0.0f));
+                        transform.Translate(new Vector3(moveX, 0.0f, 0.0f));
                     }
                 }
                 else if (h < 0)
                 {
-                    if (player.transform.position.x > 0)
+                    if (transform.position.x > 0)
                     {
-                        player.transform.Translate (new Vector3(-moveX, 0.0f, 0.0f));
+                        transform.Translate (new Vector3(-moveX, 0.0f, 0.0f));
                     }
                 }
 
                 if (v > 0)
                 {
-                    if (player.transform.position.y < grid.y - 1)
+                    if (transform.position.y < grid.y - 1)
                     {
-                        player.transform.Translate (new Vector3(0.0f, moveY, 0.0f));
+                        transform.Translate (new Vector3(0.0f, moveY, 0.0f));
                     }
                 }
                 else if (v < 0)
                 {
-                    if (player.transform.position.y > 0)
+                    if (transform.position.y > 0)
                     {
-                        player.transform.Translate(new Vector3(0.0f, -moveY, 0.0f));
+                        transform.Translate(new Vector3(0.0f, -moveY, 0.0f));
                     }
                 }
 
-                hostility.hostility = grid.getHostilityData()[(int)player.transform.position.x, (int)player.transform.position.y];
+				UpdateHostility ();
             }
         }
 	}
