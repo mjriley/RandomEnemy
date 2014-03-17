@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class HostilityDisplay : MonoBehaviour 
 {
+	public GUIStyle testStyle;
+
 	public int playerHostility = 0;
     public int hostility = 0;
 	public int hostilityThreshhold = 0;
@@ -138,20 +140,42 @@ public class HostilityDisplay : MonoBehaviour
 
 	void OnGUI()
 	{
-		GUI.Box (new Rect(containerX, containerY, width, Screen.height - border * 2), "Loader Menu");
-
+		Rect parentRect = new Rect (containerX, containerY, width, Screen.height - border * 2);
+		GUI.BeginGroup (parentRect);
+			GUI.Box (new Rect (0, 0, parentRect.width, parentRect.height), "Loader Menu", testStyle);
+			
 		for (int i = 0; i < labels.Count; ++i)
-		{
-			GUI.Label (new Rect(containerX + padding, containerY + startY + i * textHeight, textWidth, textHeight), labels[i]);
-		}
+        {
+            GUI.Label(new Rect(testStyle.border.left, testStyle.border.top + i * textHeight, textWidth, textHeight), labels[i]);
+        }
 
-		if (pokemonList != null) {
-			for (int i = 0; i < pokemonList.Count; ++i) {
-				int column = i % pokemonPerRow;
-				int row = i / pokemonPerRow;
-				GUI.Label (new Rect (containerX + padding + iconWidth * column, containerY + startY + 150 + iconHeight * row, iconWidth, iconHeight), textures [pokemonList [i]]);
-			}
-		}
+        if (pokemonList != null)
+        {
+            for (int i=0; i < pokemonList.Count; ++i)
+            {
+                int column = i % pokemonPerRow;
+                int row = i / pokemonPerRow;
+                GUI.Label (new Rect(testStyle.border.left + iconWidth * column, startY + 150 + iconHeight * row, iconWidth, iconHeight), textures[pokemonList[i]]);
+            }
+        }
+
+		GUI.EndGroup ();
+		//GUI.Box (new Rect(containerX, containerY, width, Screen.height - border * 2), "Loader Menu", testStyle);
+
+
+
+//		for (int i = 0; i < labels.Count; ++i)
+//		{
+//			GUI.Label (new Rect(containerX + padding, containerY + startY + i * textHeight, textWidth, textHeight), labels[i]);
+//		}
+
+//		if (pokemonList != null) {
+//			for (int i = 0; i < pokemonList.Count; ++i) {
+//				int column = i % pokemonPerRow;
+//				int row = i / pokemonPerRow;
+//				GUI.Label (new Rect (containerX + padding + iconWidth * column, containerY + startY + 150 + iconHeight * row, iconWidth, iconHeight), textures [pokemonList [i]]);
+//			}
+//		}
 	}
 
 }
