@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -11,32 +12,64 @@ public class PlayerMovement : MonoBehaviour {
 	private Transform playerPosition;
 	private int prevUpdateFrame = 0;
 
-    private HostilityDisplay hostility;
+    private HostilityDisplay hostilityDisplay;
 
     public GameObject terrain;
 	private Grid grid;
 
 	public int currentHostility = 0;
+	public int randomHostilityMax = 40;
+	public int randomHostilityMin = 20;
+
+	private int minHostility = 0;
 
 
 	// Use this for initialization
 	void Start ()
 	{
 		grid = terrain.GetComponent<Grid>();
-        hostility = GameObject.Find("statusDisplay").GetComponent<HostilityDisplay>();
+        hostilityDisplay = GameObject.Find("statusDisplay").GetComponent<HostilityDisplay>();
 
 		UpdateHostility ();
 	}
 
 	void UpdateHostility()
 	{
-		hostility.hostility = grid.getHostilityData () [(int)transform.position.x, (int)transform.position.y];
+		int curX = (int)transform.position.x;
+		int curY = (int)transform.position.y;
+
+		int hostilityIncrement = grid.getHostilityData () [curX, curY];
+		int hostilityThreshhold = grid.getHostilityThreshhold () [curX, curY];
+		List<Pokemon> pokemonList = grid.getPokemonData () [curX, curY];
+
+		currentHostility += hostilityIncrement;
+
+		currentHostility = Mathf.Max (currentHostility, minHostility);
+
+		// check for a random battle
+		bool battleOccurred = false;
+
+		if (currentHostility >= hostilityThreshhold) {
+			TriggerBattle(pokemonList);
+			battleOccurred = true;
+				}
+
+		hostilityDisplay.UpdateDisplay (currentHostility, grid.getHostilityData () [curX, curY], hostilityThreshhold, minHostility, battleOccurred, pokemonList);
 	}
 
-	void CheckForRandomBattle()
+	void TriggerBattle(List<Pokemon> pokemonList)
 	{
+		Pokemon pokemon = pokemonList [Random.Range (0, pokemonList.Count)];
+		hostilityDisplay.UpdateBattleContext (pokemon);
+		// select a random pokemon for battle
+
+		// reset the hostility
+		currentHostility = Random.Range (0, randomHostilityMax);
+
+		// randomize the minimum
+		minHostility = Random.Range (0, randomHostilityMin);
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{
@@ -44,6 +77,8 @@ public class PlayerMovement : MonoBehaviour {
         {
             float h = Input.GetAxis("Horizontal");
             float v = Input.GetAxis("Vertical");
+
+			bool didMove = false;
 
             // check to make sure movement needs to be updated this window
             if ((h != 0) || (v != 0))
@@ -56,6 +91,7 @@ public class PlayerMovement : MonoBehaviour {
                     if (transform.position.x < grid.x - 1)
                     {
                         transform.Translate(new Vector3(moveX, 0.0f, 0.0f));
+						didMove = true;
                     }
                 }
                 else if (h < 0)
@@ -63,6 +99,7 @@ public class PlayerMovement : MonoBehaviour {
                     if (transform.position.x > 0)
                     {
                         transform.Translate (new Vector3(-moveX, 0.0f, 0.0f));
+						didMove = true;
                     }
                 }
 
@@ -71,6 +108,7 @@ public class PlayerMovement : MonoBehaviour {
                     if (transform.position.y < grid.y - 1)
                     {
                         transform.Translate (new Vector3(0.0f, moveY, 0.0f));
+						didMove = true;
                     }
                 }
                 else if (v < 0)
@@ -78,10 +116,14 @@ public class PlayerMovement : MonoBehaviour {
                     if (transform.position.y > 0)
                     {
                         transform.Translate(new Vector3(0.0f, -moveY, 0.0f));
+						didMove = true;
                     }
                 }
 
-				UpdateHostility ();
+				if (didMove)
+				{
+					UpdateHostility ();
+				}
             }
         }
 	}

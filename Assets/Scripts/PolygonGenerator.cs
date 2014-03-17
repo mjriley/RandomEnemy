@@ -24,6 +24,8 @@ public class PolygonGenerator : MonoBehaviour {
 	private Vector2 tStone = new Vector2(1, 0);
 	private Vector2 tGrass = new Vector2(0, 1);
     private Vector2 tBrick = new Vector2(1, 1);
+	private Vector2 tWater = new Vector2 (1, 3);
+	private Vector2 tDeepWater = new Vector2(2, 3);
 
 	private int squareCount;
 
@@ -129,6 +131,14 @@ public class PolygonGenerator : MonoBehaviour {
                 {
                     GenSquare(px, py, tBrick);
                 }
+				else if (blocks[px, py] == 4)
+				{
+					GenSquare (px, py, tWater);
+				}
+				else if (blocks[px, py] == 5)
+				{
+					GenSquare(px, py, tDeepWater);
+				}
 			}
 		}
 	}

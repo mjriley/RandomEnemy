@@ -87,7 +87,6 @@ GameObject:
   - 114: {fileID: 360566416}
   - 23: {fileID: 360566419}
   - 64: {fileID: 360566420}
-  - 114: {fileID: 360566421}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -161,22 +160,6 @@ MeshCollider:
   m_SmoothSphereCollisions: 0
   m_Convex: 0
   m_Mesh: {fileID: 0}
---- !u!114 &360566421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 360566415}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c64b7c9ccfa468849b736f8f5c2628ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveX: 1
-  moveY: 1
-  moveFrames: 20
-  terrain: {fileID: 0}
-  currentHostility: 0
 --- !u!114 &360566422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,7 +168,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 360566415}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7d5bf44d78906946bf964ebc9a60b80, type: 3}
+  m_Script: {fileID: 11500000, guid: b4fbe2c9b1c854b8db5451b10b9248e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   x: 7
@@ -231,9 +214,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveX: 1
   moveY: 1
-  moveFrames: 30
+  moveFrames: 10
   terrain: {fileID: 360566415}
   currentHostility: 0
+  randomHostilityMax: 40
+  randomHostilityMin: 20
 --- !u!1 &1189248650
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,7 +357,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2107289085}
-  - 132: {fileID: 2107289084}
   - 114: {fileID: 2107289086}
   m_Layer: 0
   m_Name: statusDisplay
@@ -381,29 +365,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!132 &2107289084
-GUIText:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2107289083}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Text: Test Me
-  m_Anchor: 1
-  m_Alignment: 1
-  m_PixelOffset: {x: 0, y: 0}
-  m_LineSpacing: 1
-  m_TabSize: 4
-  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Material: {fileID: 0}
-  m_FontSize: 20
-  m_FontStyle: 0
-  m_Color:
-    serializedVersion: 2
-    rgba: 4278190329
-  m_PixelCorrect: 1
-  m_RichText: 1
 --- !u!4 &2107289085
 Transform:
   m_ObjectHideFlags: 0
@@ -428,12 +389,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHostility: 0
   hostility: 0
+  hostilityThreshhold: 0
+  battleFlag: 0
   width: 240
   border: 25
   padding: 10
   startY: 25
-  textHeight: 20
-  textWidth: 100
+  textHeight: 22
+  textWidth: 200
+  pokemonPerRow: 4
   spriteSheet: {fileID: 2800000, guid: 323a29c31b3134e6fa0574dc55b0d9b1, type: 3}
   iconColumn: 37
   iconWidth: 43
