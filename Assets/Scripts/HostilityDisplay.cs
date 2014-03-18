@@ -5,6 +5,10 @@ using System.Collections.Generic;
 public class HostilityDisplay : MonoBehaviour 
 {
 	public GUIStyle testStyle;
+    public GUIStyle iconStyle;
+    public GUIStyle statStyle;
+    public GUIStyle sectionHeaderCaption;
+    public GUIStyle sectionHeaderStyle;
 
 	public int playerHostility = 0;
     public int hostility = 0;
@@ -94,10 +98,10 @@ public class HostilityDisplay : MonoBehaviour
 		hostilityThreshhold = tileThreshhold;
 		battleFlag = isBattle;
 
-		labels [PLAYER_HOSTILITY_INDEX] = PLAYER_HOSTILITY_PREFIX + playerHostility;
-		labels [TILE_HOSTILITY_INDEX] = HOSTILITY_PREFIX + hostility;
-		labels [HOSTILITY_THRESHHOLD_INDEX] = HOSTILITY_THRESHHOLD_PREFIX + hostilityThreshhold;
-		labels [MIN_HOSTILITY_INDEX] = MIN_HOSTILITY_PREFIX + minHostility;
+		labels [PLAYER_HOSTILITY_INDEX] = PLAYER_HOSTILITY_PREFIX + "<color=darkblue>" + playerHostility + "</color>";
+		labels [TILE_HOSTILITY_INDEX] = HOSTILITY_PREFIX + "<color=darkblue>" + hostility + "</color>";
+		labels [HOSTILITY_THRESHHOLD_INDEX] = HOSTILITY_THRESHHOLD_PREFIX + "<color=darkblue>" + hostilityThreshhold + "</color>";
+		labels [MIN_HOSTILITY_INDEX] = MIN_HOSTILITY_PREFIX + "<color=darkblue>" + minHostility + "</color>";
 		if (!battleFlag)
 		{
 			labels[BATTLE_INDEX] = "";
@@ -141,41 +145,55 @@ public class HostilityDisplay : MonoBehaviour
 	void OnGUI()
 	{
 		Rect parentRect = new Rect (containerX, containerY, width, Screen.height - border * 2);
-		GUI.BeginGroup (parentRect);
-			GUI.Box (new Rect (0, 0, parentRect.width, parentRect.height), "Loader Menu", testStyle);
-			
-		for (int i = 0; i < labels.Count; ++i)
-        {
-            GUI.Label(new Rect(testStyle.border.left, testStyle.border.top + i * textHeight, textWidth, textHeight), labels[i]);
-        }
+		GUILayout.BeginArea(parentRect, "Diagnostics", testStyle);
 
-        if (pokemonList != null)
-        {
-            for (int i=0; i < pokemonList.Count; ++i)
-            {
-                int column = i % pokemonPerRow;
-                int row = i / pokemonPerRow;
-                GUI.Label (new Rect(testStyle.border.left + iconWidth * column, startY + 150 + iconHeight * row, iconWidth, iconHeight), textures[pokemonList[i]]);
-            }
-        }
+        
+                    Rect textRect = new Rect(testStyle.border.left + testStyle.padding.left, 
+                                            testStyle.border.top + testStyle.padding.top, 
+                                         parentRect.width - testStyle.border.left - testStyle.border.right - testStyle.padding.left - testStyle.padding.right, 
+                                         parentRect.height - testStyle.border.top - testStyle.border.bottom - testStyle.padding.top - testStyle.padding.bottom);
+        
+        GUILayout.BeginArea(textRect);
+        GUILayout.BeginVertical();
 
-		GUI.EndGroup ();
-		//GUI.Box (new Rect(containerX, containerY, width, Screen.height - border * 2), "Loader Menu", testStyle);
+                for (int i = 0; i < labels.Count; ++i)
+                {
+                    //GUI.Label(new Rect(0, i * textHeight, textWidth, textHeight), labels[i]);
+                    GUILayout.Label(labels[i], statStyle);
+                }
+                
 
-
-
-//		for (int i = 0; i < labels.Count; ++i)
-//		{
-//			GUI.Label (new Rect(containerX + padding, containerY + startY + i * textHeight, textWidth, textHeight), labels[i]);
-//		}
-
-//		if (pokemonList != null) {
-//			for (int i = 0; i < pokemonList.Count; ++i) {
-//				int column = i % pokemonPerRow;
-//				int row = i / pokemonPerRow;
-//				GUI.Label (new Rect (containerX + padding + iconWidth * column, containerY + startY + 150 + iconHeight * row, iconWidth, iconHeight), textures [pokemonList [i]]);
-//			}
-//		}
+                
+                GUILayout.FlexibleSpace();
+                
+                GUILayout.Label("Native Pokemon", sectionHeaderCaption);
+                
+                GUILayout.BeginVertical(sectionHeaderStyle, GUILayout.MinHeight(106));
+                
+                // This should be a conditional group, but height isn't respected if the vertical group contains no elements
+                GUILayout.BeginHorizontal();
+                
+                if (pokemonList != null)
+                {   
+                    for (int i = 0; i < pokemonList.Count; ++i)
+                    {
+                        if (i % pokemonPerRow == 0 && i != 0)
+                        {
+                            GUILayout.EndHorizontal();
+                            GUILayout.BeginHorizontal();
+                        }
+                        
+                        GUILayout.Label(textures[pokemonList[i]], iconStyle, GUILayout.Width(textures[pokemonList[i]].width));
+                    }
+                }
+                
+                GUILayout.EndHorizontal();
+                
+                GUILayout.EndVertical();
+                
+        GUILayout.EndVertical();
+        GUILayout.EndArea();
+        GUILayout.EndArea();
 	}
 
 }
