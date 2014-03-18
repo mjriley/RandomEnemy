@@ -22,6 +22,16 @@ public class PlayerMovement : MonoBehaviour {
 	public int randomHostilityMin = 20;
 
 	private int minHostility = 0;
+    
+    private Animator animator;
+    
+    private enum Direction
+    {
+        SOUTH = 0,
+        WEST,
+        NORTH,
+        EAST
+    }
 
 
 	// Use this for initialization
@@ -31,6 +41,8 @@ public class PlayerMovement : MonoBehaviour {
         hostilityDisplay = GameObject.Find("statusDisplay").GetComponent<HostilityDisplay>();
 
 		UpdateHostility ();
+        
+        animator = this.GetComponentInChildren<Animator>();
 	}
 
 	void UpdateHostility()
@@ -112,6 +124,7 @@ public class PlayerMovement : MonoBehaviour {
                 {
                     if (transform.position.x < grid.x - 1)
                     {
+                        animator.SetInteger("Direction", (int)Direction.EAST);
                         transform.Translate(new Vector3(moveX, 0.0f, 0.0f));
 						didMove = true;
                     }
@@ -120,6 +133,7 @@ public class PlayerMovement : MonoBehaviour {
                 {
                     if (transform.position.x > 0)
                     {
+                        animator.SetInteger("Direction", (int)Direction.WEST);
                         transform.Translate (new Vector3(-moveX, 0.0f, 0.0f));
 						didMove = true;
                     }
@@ -129,6 +143,7 @@ public class PlayerMovement : MonoBehaviour {
                 {
                     if (transform.position.y < grid.y - 1)
                     {
+                        animator.SetInteger("Direction", (int)Direction.NORTH);
                         transform.Translate (new Vector3(0.0f, moveY, 0.0f));
 						didMove = true;
                     }
@@ -137,6 +152,7 @@ public class PlayerMovement : MonoBehaviour {
                 {
                     if (transform.position.y > 0)
                     {
+                        animator.SetInteger("Direction", (int)Direction.SOUTH);
                         transform.Translate(new Vector3(0.0f, -moveY, 0.0f));
 						didMove = true;
                     }
