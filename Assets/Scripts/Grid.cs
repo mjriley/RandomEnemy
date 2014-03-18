@@ -10,12 +10,31 @@ public class Grid : MonoBehaviour {
     private int[,] hostilityData;
     private byte[,] terrainData;
 	private int[,] hostilityThreshhold;
-	private List<Pokemon>[,] pokemonData;
+	private List<PokemonData>[,] pokemonData;
 
-	private List<Pokemon> type1 = new List<Pokemon>(new Pokemon[] {Pokemon.Charizard, Pokemon.Oddish, Pokemon.Pichu, Pokemon.Psyduck});
-	private List<Pokemon> type2 = new List<Pokemon>(new Pokemon[] {Pokemon.Charizard, Pokemon.Chespin, Pokemon.Froakie, 
-		Pokemon.Jiggypuff, Pokemon.Lilteo, Pokemon.Oddish, Pokemon.Squirtle});
-	private List<Pokemon> type3 = new List<Pokemon>(new Pokemon[] {Pokemon.Jiggypuff, Pokemon.Froakie, Pokemon.Chespin, Pokemon.Pikachu});
+	private List<PokemonData> type1 = new List<PokemonData>(new PokemonData[] {
+        new PokemonData(Pokemon.Charizard, 10), 
+        new PokemonData(Pokemon.Oddish, 20), 
+        new PokemonData(Pokemon.Pichu, 30), 
+        new PokemonData(Pokemon.Psyduck, 5)
+    });
+    
+	private List<PokemonData> type2 = new List<PokemonData>(new PokemonData[] {
+        new PokemonData(Pokemon.Charizard, 10), 
+        new PokemonData(Pokemon.Chespin, 10), 
+        new PokemonData(Pokemon.Froakie, 10),
+		new PokemonData(Pokemon.Jiggypuff, 10),
+        new PokemonData(Pokemon.Lilteo, 20),
+        new PokemonData(Pokemon.Oddish, 20),
+        new PokemonData(Pokemon.Squirtle, 20)
+    });
+    
+	private List<PokemonData> type3 = new List<PokemonData>(new PokemonData[] {
+        new PokemonData(Pokemon.Jiggypuff, 5), 
+        new PokemonData(Pokemon.Froakie, 10),
+        new PokemonData(Pokemon.Chespin, 15),
+        new PokemonData(Pokemon.Pikachu, 20)
+    });
 
 
     private const int TERRAIN_STONE = 1;
@@ -35,7 +54,7 @@ public class Grid : MonoBehaviour {
         terrainData = new byte[x, y];
         hostilityData = new int[x, y];
 		hostilityThreshhold = new int[x, y];
-		pokemonData = new List<Pokemon>[x, y];
+		pokemonData = new List<PokemonData>[x, y];
 
         for (int i=0; i < x; ++i)
         {
@@ -95,7 +114,7 @@ public class Grid : MonoBehaviour {
         return terrainData;
     }
 
-	public List<Pokemon>[,] getPokemonData()
+	public List<PokemonData>[,] getPokemonData()
 	{
 		return pokemonData;
 	}

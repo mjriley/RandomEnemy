@@ -9,6 +9,7 @@ public class HostilityDisplay : MonoBehaviour
     public GUIStyle statStyle;
     public GUIStyle sectionHeaderCaption;
     public GUIStyle sectionHeaderStyle;
+    public GUIStyle insetStyle;
 
 	public int playerHostility = 0;
     public int hostility = 0;
@@ -42,7 +43,7 @@ public class HostilityDisplay : MonoBehaviour
 	private string BATTLE_MESSAGE_PREFIX = "Battle Occurred! Fought ";
 	
 	private List<string> labels = new List<string> ();
-	private List<Pokemon> pokemonList = new List<Pokemon> ();
+	private List<PokemonData> pokemonList = new List<PokemonData>();
 
 	public int iconColumn = 37;
 	public int iconWidth = 43;
@@ -91,7 +92,7 @@ public class HostilityDisplay : MonoBehaviour
     {
 	}
 
-	public void UpdateDisplay(int currentHostility, int tileHostility, int tileThreshhold, int minHostility, bool isBattle, List<Pokemon> pokemon)
+	public void UpdateDisplay(int currentHostility, int tileHostility, int tileThreshhold, int minHostility, bool isBattle, List<PokemonData> pokemon)
 	{
 		playerHostility = currentHostility;
 		hostility = tileHostility;
@@ -182,8 +183,10 @@ public class HostilityDisplay : MonoBehaviour
                             GUILayout.EndHorizontal();
                             GUILayout.BeginHorizontal();
                         }
+                        GUILayout.Label(textures[pokemonList[i].pokemon], iconStyle, GUILayout.Width(textures[pokemonList[i].pokemon].width));
                         
-                        GUILayout.Label(textures[pokemonList[i]], iconStyle, GUILayout.Width(textures[pokemonList[i]].width));
+                        Rect lastRect = GUILayoutUtility.GetLastRect();
+                        GUI.Box(new Rect(lastRect.x, lastRect.y, 18, 18), pokemonList[i].weight.ToString(), insetStyle);
                     }
                 }
                 

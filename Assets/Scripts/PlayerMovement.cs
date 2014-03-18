@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		int hostilityIncrement = grid.getHostilityData () [curX, curY];
 		int hostilityThreshhold = grid.getHostilityThreshhold () [curX, curY];
-		List<Pokemon> pokemonList = grid.getPokemonData () [curX, curY];
+		List<PokemonData> pokemonList = grid.getPokemonData () [curX, curY];
 
 		currentHostility += hostilityIncrement;
 
@@ -57,11 +57,33 @@ public class PlayerMovement : MonoBehaviour {
 		hostilityDisplay.UpdateDisplay (currentHostility, grid.getHostilityData () [curX, curY], hostilityThreshhold, minHostility, battleOccurred, pokemonList);
 	}
 
-	void TriggerBattle(List<Pokemon> pokemonList)
+	void TriggerBattle(List<PokemonData> pokemonList)
 	{
-		Pokemon pokemon = pokemonList [Random.Range (0, pokemonList.Count)];
+        // compute the total weight of the pokemon list
+        uint totalWeight = 0;
+        foreach (PokemonData data in pokemonList)
+        {
+            totalWeight += data.weight;        
+        }
+        
+        uint randomWeight = (uint)Random.Range(0, (int)totalWeight);
+        
+        uint currentWeight = 0;
+        
+        int selectedPokemon = 0;
+        for (; selectedPokemon < pokemonList.Count; ++selectedPokemon)
+        {
+            currentWeight += pokemonList[selectedPokemon].weight;
+            
+            if (currentWeight >= randomWeight)
+            {
+                break;
+            }
+        }
+        
+		//Pokemon pokemon = pokemonList [Random.Range (0, pokemonList.Count)].pokemon;
+        Pokemon pokemon = pokemonList[selectedPokemon].pokemon;
 		hostilityDisplay.UpdateBattleContext (pokemon);
-		// select a random pokemon for battle
 
 		// reset the hostility
 		currentHostility = Random.Range (0, randomHostilityMax);
