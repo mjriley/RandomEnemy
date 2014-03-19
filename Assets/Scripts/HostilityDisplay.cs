@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class HostilityDisplay : MonoBehaviour 
+public class HostilityDisplay : MonoBehaviour, IMovementListener
 {
 	public GUIStyle testStyle;
     public GUIStyle iconStyle;
@@ -14,7 +14,9 @@ public class HostilityDisplay : MonoBehaviour
 	public int playerHostility = 0;
     public int hostility = 0;
 	public int hostilityThreshhold = 0;
+    public int minHostility = 0;
 	public bool battleFlag = false;
+    private Pokemon battlePokemon = Pokemon.Pikachu;
 
 	public int width = 240;
 	public int border = 25;
@@ -52,9 +54,15 @@ public class HostilityDisplay : MonoBehaviour
 
 	private Dictionary<Pokemon, Point> coords = new Dictionary<Pokemon, Point>();
 	private Dictionary<Pokemon, Texture2D> textures = new Dictionary<Pokemon, Texture2D>();
+    
+    private PlayerMovement movement;
 
 	// Use this for initialization
 	void Start () {
+        // register to listen for player movement
+        GameObject go = GameObject.Find("Player");
+        movement = go.GetComponent<PlayerMovement>();
+        
 		containerX = Screen.width - width - border;
 		containerY = border;
 
@@ -85,36 +93,57 @@ public class HostilityDisplay : MonoBehaviour
 		addIcon (Pokemon.Froakie);
 		addIcon (Pokemon.Oddish);
 		addIcon (Pokemon.Lilteo);
-	}
+        
+        movement.RegisterListener("display", this);
+        
+        //UpdateDisplay(movement.currentHostility)
+        HandleMovement();
+    }
+    
+    public void HandleMovement()
+    {
+        playerHostility = movement.CurrentHostility;
+        TileInfo tileInfo = movement.GetCurrentTileInfo();
+        hostility = tileInfo.HostilityIncrement;
+        hostilityThreshhold = tileInfo.HostilityThreshold;
+        battleFlag = movement.BattleOccured;
+        pokemonList = tileInfo.PokemonData;
+        minHostility = movement.MinHostility;
+        battlePokemon = movement.BattlePokemon;
+        
+        UpdateDisplay();
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
 	}
 
-	public void UpdateDisplay(int currentHostility, int tileHostility, int tileThreshhold, int minHostility, bool isBattle, List<PokemonData> pokemon)
+	void UpdateDisplay()
 	{
-		playerHostility = currentHostility;
-		hostility = tileHostility;
-		hostilityThreshhold = tileThreshhold;
-		battleFlag = isBattle;
+//		playerHostility = currentHostility;
+//		hostility = tileHostility;
+//		hostilityThreshhold = tileThreshhold;
+//		battleFlag = isBattle;
 
 		labels [PLAYER_HOSTILITY_INDEX] = PLAYER_HOSTILITY_PREFIX + "<color=darkblue>" + playerHostility + "</color>";
 		labels [TILE_HOSTILITY_INDEX] = HOSTILITY_PREFIX + "<color=darkblue>" + hostility + "</color>";
 		labels [HOSTILITY_THRESHHOLD_INDEX] = HOSTILITY_THRESHHOLD_PREFIX + "<color=darkblue>" + hostilityThreshhold + "</color>";
 		labels [MIN_HOSTILITY_INDEX] = MIN_HOSTILITY_PREFIX + "<color=darkblue>" + minHostility + "</color>";
-		if (!battleFlag)
-		{
+		if (battleFlag)
+        {
+            labels[BATTLE_INDEX] = BATTLE_MESSAGE_PREFIX + battlePokemon.ToString();
+        }
+		else 
+        {
 			labels[BATTLE_INDEX] = "";
 		}
-
-		pokemonList = pokemon;
 	}
 
-	public void UpdateBattleContext(Pokemon pokemon)
-	{
-		labels[BATTLE_INDEX] = BATTLE_MESSAGE_PREFIX + pokemon.ToString();
-	}
+//	public void UpdateBattleContext(Pokemon pokemon)
+//	{
+//		labels[BATTLE_INDEX] = BATTLE_MESSAGE_PREFIX + pokemon.ToString();
+//	}
 
 	void addDisplayText(string text)
 	{

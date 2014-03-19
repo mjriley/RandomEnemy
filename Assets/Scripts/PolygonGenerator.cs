@@ -113,29 +113,29 @@ public class PolygonGenerator : MonoBehaviour {
 
 	void BuildMesh()
 	{
-        byte[,] blocks = grid.getTerrainData();
+        TerrainType[,] blocks = grid.getTerrainData();
 
 		for (int px = 0; px < blocks.GetLength (0); ++px)
 		{
 			for (int py = 0; py < blocks.GetLength(1); ++py)
 			{
-				if (blocks[px, py] == 1)
+				if (blocks[px, py] == TerrainType.Stone)
 				{
 					GenSquare (px, py, tStone);
 				}
-				else if (blocks[px, py] == 2)
+				else if (blocks[px, py] == TerrainType.Grass)
 				{
 					GenSquare (px, py, tGrass);
 				}
-                else if (blocks[px, py] == 3)
+                else if (blocks[px, py] == TerrainType.Brick)
                 {
                     GenSquare(px, py, tBrick);
                 }
-				else if (blocks[px, py] == 4)
+				else if (blocks[px, py] == TerrainType.Water)
 				{
 					GenSquare (px, py, tWater);
 				}
-				else if (blocks[px, py] == 5)
+				else if (blocks[px, py] == TerrainType.DeepWater)
 				{
 					GenSquare(px, py, tDeepWater);
 				}

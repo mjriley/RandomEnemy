@@ -12,18 +12,62 @@ public class PlayerMovement : MonoBehaviour {
 	private Transform playerPosition;
 	private int prevUpdateFrame = 0;
 
-    private HostilityDisplay hostilityDisplay;
+    //private HostilityDisplay hostilityDisplay;
 
     public GameObject terrain;
 	private Grid grid;
 
-	public int currentHostility = 0;
+	private int currentHostility = 0;
+    public int CurrentHostility
+    {
+        get
+        {
+            return currentHostility;
+        }
+    }
+    
 	public int randomHostilityMax = 40;
 	public int randomHostilityMin = 20;
 
 	private int minHostility = 0;
+    public int MinHostility
+    {
+        get
+        {
+            return minHostility;
+        }
+    }
     
     private Animator animator;
+    
+    private Point currentPosition = new Point(0, 0);
+    public Point CurrentPosition
+    {
+        get
+        {
+            return currentPosition;
+        }
+    }
+    
+    private bool battleOccurred = false;
+    public bool BattleOccured
+    {
+        get
+        {
+            return battleOccurred;
+        }
+    }
+    
+    private Pokemon battlePokemon = Pokemon.Pikachu;
+    public Pokemon BattlePokemon
+    {
+        get
+        {
+            return battlePokemon;
+        }
+    }
+    
+    private Dictionary<string, IMovementListener> m_listeners = new Dictionary<string, IMovementListener>();
     
     private enum Direction
     {
@@ -32,18 +76,52 @@ public class PlayerMovement : MonoBehaviour {
         NORTH,
         EAST
     }
+    
+    public TileInfo GetCurrentTileInfo()
+    {
+        return grid.getTileInfo()[currentPosition.x, currentPosition.y];
+    }
 
 
 	// Use this for initialization
 	void Start ()
 	{
 		grid = terrain.GetComponent<Grid>();
-        hostilityDisplay = GameObject.Find("statusDisplay").GetComponent<HostilityDisplay>();
+        //hostilityDisplay = GameObject.Find("statusDisplay").GetComponent<HostilityDisplay>();
 
-		UpdateHostility ();
+		//UpdateHostility ();
         
         animator = this.GetComponentInChildren<Animator>();
 	}
+    
+    
+    /***************
+     * Pub/Sub stuff
+     ***************/
+    public void RegisterListener(string registeredName, IMovementListener listener)
+    {
+        m_listeners[registeredName] = listener;
+    }
+    
+    public void RemoveListener(string registeredName)
+    {
+        m_listeners.Remove(registeredName);
+    }
+    
+    void NotifyListeners()
+    {
+        foreach (KeyValuePair<string, IMovementListener> pair in m_listeners)
+        {
+            pair.Value.HandleMovement();
+        }
+    }
+    /**************/
+    
+    void UpdatePosition()
+    {
+        currentPosition.x = (int)transform.position.x;
+        currentPosition.y = (int)transform.position.y;
+    }
 
 	void UpdateHostility()
 	{
@@ -59,14 +137,17 @@ public class PlayerMovement : MonoBehaviour {
 		currentHostility = Mathf.Max (currentHostility, minHostility);
 
 		// check for a random battle
-		bool battleOccurred = false;
-
-		if (currentHostility >= hostilityThreshhold) {
+		if (currentHostility >= hostilityThreshhold)
+        {
 			TriggerBattle(pokemonList);
 			battleOccurred = true;
-				}
+		}
+        else
+        {
+            battleOccurred = false;
+        }
 
-		hostilityDisplay.UpdateDisplay (currentHostility, grid.getHostilityData () [curX, curY], hostilityThreshhold, minHostility, battleOccurred, pokemonList);
+		//hostilityDisplay.UpdateDisplay (currentHostility, grid.getHostilityData () [curX, curY], hostilityThreshhold, minHostility, battleOccurred, pokemonList);
 	}
 
 	void TriggerBattle(List<PokemonData> pokemonList)
@@ -94,8 +175,8 @@ public class PlayerMovement : MonoBehaviour {
         }
         
 		//Pokemon pokemon = pokemonList [Random.Range (0, pokemonList.Count)].pokemon;
-        Pokemon pokemon = pokemonList[selectedPokemon].pokemon;
-		hostilityDisplay.UpdateBattleContext (pokemon);
+        battlePokemon = pokemonList[selectedPokemon].pokemon;
+		//hostilityDisplay.UpdateBattleContext (pokemon);
 
 		// reset the hostility
 		currentHostility = Random.Range (0, randomHostilityMax);
@@ -160,7 +241,9 @@ public class PlayerMovement : MonoBehaviour {
 
 				if (didMove)
 				{
-					UpdateHostility ();
+                    UpdatePosition();
+					UpdateHostility();
+                    NotifyListeners();
 				}
             }
         }
