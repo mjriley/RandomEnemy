@@ -128,13 +128,13 @@ public class PlayerMovement : MonoBehaviour {
 		int curX = (int)transform.position.x;
 		int curY = (int)transform.position.y;
 
-		int hostilityIncrement = grid.getHostilityData () [curX, curY];
-		int hostilityThreshhold = grid.getHostilityThreshhold () [curX, curY];
-		List<PokemonData> pokemonList = grid.getPokemonData () [curX, curY];
+		int hostilityIncrement = grid.getHostilityData()[curX, curY];
+		int hostilityThreshhold = grid.getHostilityThreshhold()[curX, curY];
+		List<PokemonData> pokemonList = grid.getPokemonData()[curX, curY];
 
 		currentHostility += hostilityIncrement;
 
-		currentHostility = Mathf.Max (currentHostility, minHostility);
+		currentHostility = Mathf.Max(currentHostility, minHostility);
 
 		// check for a random battle
 		if (currentHostility >= hostilityThreshhold)
@@ -146,8 +146,6 @@ public class PlayerMovement : MonoBehaviour {
         {
             battleOccurred = false;
         }
-
-		//hostilityDisplay.UpdateDisplay (currentHostility, grid.getHostilityData () [curX, curY], hostilityThreshhold, minHostility, battleOccurred, pokemonList);
 	}
 
 	void TriggerBattle(List<PokemonData> pokemonList)
@@ -174,9 +172,7 @@ public class PlayerMovement : MonoBehaviour {
             }
         }
         
-		//Pokemon pokemon = pokemonList [Random.Range (0, pokemonList.Count)].pokemon;
         battlePokemon = pokemonList[selectedPokemon].pokemon;
-		//hostilityDisplay.UpdateBattleContext (pokemon);
 
 		// reset the hostility
 		currentHostility = Random.Range (0, randomHostilityMax);
